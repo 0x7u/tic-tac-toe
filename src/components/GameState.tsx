@@ -1,9 +1,10 @@
 import {createContext, PropsWithChildren, useCallback, useContext, useEffect} from "react";
-import {Board, Player} from "../types/board.types";
+import {Board, Outcome, Player} from "../types/board";
 import {getNextPlayer, makeAMove} from "../services/player";
 import {getGameOutcome} from "../services/game-logic";
 import {getComputerNextMove} from "../services/computer";
 import {useLocalStorage} from "usehooks-ts";
+import {History} from "../types/history";
 
 type GameStateData = {
     board: Board,
@@ -11,7 +12,7 @@ type GameStateData = {
     play: (index: number) => void
     computerGame: boolean
     toggleComputerGame: () => void;
-    outcome: Player | "draw" | undefined
+    outcome: Outcome | undefined
     newGame: () => void;
 }
 export const GameState = createContext<GameStateData | undefined>(undefined);
@@ -24,8 +25,12 @@ export const GameStateProvider = ({children}: PropsWithChildren<object>) => {
     const [currentPlayer, setCurrentPlayer] = useLocalStorage<Player>("currentPlayer", INITIAL_PLAYER)
     const [computerGame, setComputerGame] = useLocalStorage("computerGame", false)
     const [outcome, setOutcome] = useLocalStorage<GameStateData["outcome"]>("outcome", undefined)
+    const [, setHistory] = useLocalStorage<History[]>('game-history', [])
 
     const newGame = () => {
+        if (!!outcome) {
+            setHistory(previousHistory => ([{board, outcome}, ...previousHistory]))
+        }
         setBoard(INITIAL_BOARD)
         setCurrentPlayer(INITIAL_PLAYER)
         setOutcome(undefined)

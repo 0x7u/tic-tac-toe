@@ -1,5 +1,5 @@
 import {makeAMove} from './player';
-import {Board, Player} from "../types/board.types";
+import {Board, Player} from "../types/board";
 
 describe('makeAMove', () => {
 

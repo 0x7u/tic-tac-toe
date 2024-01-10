@@ -1,4 +1,4 @@
-import {Board, Player} from "../types/board.types";
+import {Board, Player} from "../types/board";
 
 export const makeAMove = (board: Board, player: Player, cellIndex: number): Board => {
     if (board[cellIndex] !== " ") {

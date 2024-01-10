@@ -1,4 +1,4 @@
-import {Board} from "../types/board.types";
+import {Board} from "../types/board";
 
 export const getComputerNextMove = (board: Board) => {
     const availableMoves: number[] = [];

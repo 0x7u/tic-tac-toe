@@ -1,5 +1,5 @@
 import {getComputerNextMove} from './computer';
-import {Board} from "../types/board.types";
+import {Board} from "../types/board";
 
 describe('getComputerNextMove', () => {
     test('it should return a valid move on an empty board', async () => {

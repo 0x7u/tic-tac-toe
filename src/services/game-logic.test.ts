@@ -1,5 +1,5 @@
 import {checkForWinner} from './game-logic';
-import {Board} from "../types/board.types";
+import {Board} from "../types/board";
 
 describe('checkForWinner', () => {
 
