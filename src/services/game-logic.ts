@@ -30,3 +30,10 @@ export const checkForWinner = (board: Board): Player | undefined => {
 }
 
 const isWinningCombination = (board: Board) => ([a, b, c]: typeof WINNING_COMBINATIONS[number]) => board[a] !== " " && board[a] === board[b] && board[a] === board[c]
+
+export const getGameOutcome = (board: Board) => {
+    const winningPlayer = checkForWinner(board);
+    const gameDrawn = checkForDrawnGame(board);
+
+    return !winningPlayer && gameDrawn ? "draw" : winningPlayer;
+}

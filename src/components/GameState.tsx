@@ -1,7 +1,7 @@
 import {createContext, PropsWithChildren, useCallback, useContext, useEffect} from "react";
 import {Board, Player} from "../types/board.types";
 import {getNextPlayer, makeAMove} from "../services/player";
-import {checkForDrawnGame, checkForWinner} from "../services/game-logic";
+import {getGameOutcome} from "../services/game-logic";
 import {getComputerNextMove} from "../services/computer";
 import {useLocalStorage} from "usehooks-ts";
 
@@ -11,7 +11,7 @@ type GameStateData = {
     play: (index: number) => void
     computerGame: boolean
     toggleComputerGame: () => void;
-    winner: Player | "draw" | undefined
+    outcome: Player | "draw" | undefined
     newGame: () => void;
 }
 export const GameState = createContext<GameStateData | undefined>(undefined);
@@ -23,29 +23,26 @@ export const GameStateProvider = ({children}: PropsWithChildren<object>) => {
     const [board, setBoard] = useLocalStorage<Board>("board", INITIAL_BOARD)
     const [currentPlayer, setCurrentPlayer] = useLocalStorage<Player>("currentPlayer", INITIAL_PLAYER)
     const [computerGame, setComputerGame] = useLocalStorage("computerGame", false)
-    const [winner, setWinner] = useLocalStorage<GameStateData["winner"]>("winner", undefined)
+    const [outcome, setOutcome] = useLocalStorage<GameStateData["outcome"]>("outcome", undefined)
 
     const newGame = () => {
         setBoard(INITIAL_BOARD)
         setCurrentPlayer(INITIAL_PLAYER)
-        setWinner(undefined)
+        setOutcome(undefined)
     }
 
     const play = useCallback<GameStateData["play"]>((index) => {
-        if (!!winner) {
+        if (!!outcome) {
             return;
         }
 
         const newBoard = makeAMove(board, currentPlayer, index);
-        const nextPlayer = getNextPlayer(currentPlayer);
-        const winningPlayer = checkForWinner(newBoard);
-        const gameDrawn = checkForDrawnGame(newBoard);
 
         setBoard(newBoard)
-        setWinner(gameDrawn ? "draw" : winningPlayer)
-        setCurrentPlayer(nextPlayer)
+        setOutcome(getGameOutcome(newBoard))
+        setCurrentPlayer(getNextPlayer(currentPlayer))
 
-    }, [winner, board, currentPlayer, setBoard, setCurrentPlayer, setWinner]);
+    }, [outcome, board, currentPlayer, setBoard, setCurrentPlayer, setOutcome]);
 
     useEffect(() => {
         if (computerGame && currentPlayer === "O") {
@@ -64,7 +61,7 @@ export const GameStateProvider = ({children}: PropsWithChildren<object>) => {
             play,
             computerGame,
             toggleComputerGame,
-            winner,
+            outcome,
             newGame
         }}>{children}</GameState.Provider>
 }
