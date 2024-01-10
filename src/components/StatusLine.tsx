@@ -11,7 +11,9 @@ export const StatusLine = () => {
         {!!outcome && <button onClick={newGame} className="mt-2 p-2 drop-shadow rounded-xl text-xl bg-[#BD091C]">New
             Game</button>}
         <div className="mt-2">
-            <Switch checked={computerGame} onChange={toggleComputerGame}/>
+            <Switch checked={computerGame} onChange={toggleComputerGame}>
+                Computer plays as O?
+            </Switch>
         </div>
     </>;
 };
