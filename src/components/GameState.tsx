@@ -1,7 +1,7 @@
-import {createContext, PropsWithChildren, useContext, useEffect} from "react";
+import {createContext, PropsWithChildren, useCallback, useContext, useEffect} from "react";
 import {Board, Player} from "../types/board.types";
 import {getNextPlayer, makeAMove} from "../services/player";
-import {checkForWinner, checkForDrawnGame} from "../services/game-logic";
+import {checkForDrawnGame, checkForWinner} from "../services/game-logic";
 import {getComputerNextMove} from "../services/computer";
 import {useLocalStorage} from "usehooks-ts";
 
@@ -30,7 +30,8 @@ export const GameStateProvider = ({children}: PropsWithChildren<object>) => {
         setCurrentPlayer(INITIAL_PLAYER)
         setWinner(undefined)
     }
-    const play: GameStateData["play"] = index => {
+
+    const play = useCallback<GameStateData["play"]>((index) => {
         if (!!winner) {
             return;
         }
@@ -41,9 +42,10 @@ export const GameStateProvider = ({children}: PropsWithChildren<object>) => {
         const gameDrawn = checkForDrawnGame(newBoard);
 
         setBoard(newBoard)
-        setWinner( gameDrawn ? "draw" : winningPlayer)
+        setWinner(gameDrawn ? "draw" : winningPlayer)
         setCurrentPlayer(nextPlayer)
-    }
+
+    }, [winner, board, currentPlayer, setBoard, setCurrentPlayer, setWinner]);
 
     useEffect(() => {
         if (computerGame && currentPlayer === "O") {

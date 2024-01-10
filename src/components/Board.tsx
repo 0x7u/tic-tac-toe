@@ -1,14 +1,14 @@
 import {useGameState} from "./GameState";
 import {Cell} from "./Cell";
+import {StatusLine} from "./StatusLine";
 
 export const Board = () => {
-    const {board, currentPlayer, winner, computerGame, toggleComputerGame, newGame} = useGameState()
+    const {board} = useGameState()
 
-    return <div>
-        <input type="checkbox" checked={computerGame} onChange={toggleComputerGame}/> Computer plays as O?
-        {!winner ? <div>Current player : {currentPlayer}</div> : <div>The winner is : {winner} <button onClick={newGame}>New Game</button></div>}
-        <div className="grid grid-cols-3">
+    return <div className="flex flex-col justify-center items-center min-h-screen text-white">
+        <div className="p-8 grid grid-cols-3 gap-4 flex-wrap justify-center">
             {board.map((_, index) => <Cell key={index} index={index}/>)}
         </div>
+        <StatusLine/>
     </div>
 };
