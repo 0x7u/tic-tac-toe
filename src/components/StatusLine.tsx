@@ -7,7 +7,7 @@ export const StatusLine = () => {
     return <>
         {outcome === undefined && <div>{currentPlayer}'s turn</div>}
         {outcome === "draw" && <div>The game resulted in a draw</div>}
-        {(outcome === "X" || outcome === "O") && <div>The outcome is {outcome}</div>}
+        {(outcome === "X" || outcome === "O") && <div>The winner is {outcome}</div>}
         {!!outcome && <button onClick={newGame} className="mt-2 p-2 drop-shadow rounded-xl text-xl bg-[#BD091C]">New
             Game</button>}
         <div className="mt-2">
